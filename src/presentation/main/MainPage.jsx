@@ -1,22 +1,29 @@
-import { Box, AppBar, Toolbar, IconButton, Typography, Drawer, List, ListItem, ListItemText, Card, CardContent, CardActions } from "@mui/material"
-import { Container, ListItemIcon } from "@mui/material"
-import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
+import { Box, AppBar, Toolbar, IconButton, Typography, Drawer, List, ListItem, ListItemText, Button } from "@mui/material"
+import { Container } from "@mui/material"
 import MenuIcon from '@mui/icons-material/Menu';
-import StarIcon from '@mui/icons-material/Star';
 import { useState } from "react";
-import CardEquipo from "./components/CardEquipo";
 import GrillaEquipos from "./components/GrillaEquipos";
 import dataEquipos from "../../data/equipos"
+import ModalFormularioEquipo from "./components/ModalFormularioEquipo";
 
 const MainPage = () => {
     const [drawerOpen, setDrawerOpen] = useState(false)
+    const [modalOpen, setModalOpen] = useState(false)
 
     const onMenuIconClick = () => {
         setDrawerOpen(true)
     }
 
+    const onModalOpenClick = () => {
+        setModalOpen(true)
+    }
+
     const onMenuClose = () => {
         setDrawerOpen(false)
+    }
+
+    const onModalClose = () => {
+        setModalOpen(false)
     }
 
     return <Box>
@@ -52,8 +59,18 @@ const MainPage = () => {
             </List>
         </Drawer>
         <Container sx={ { mt : 2 }}>
-            <GrillaEquipos listaEquipos={dataEquipos}/>
+            <Button variant="contained"
+                sx={ { mb : 2 } }
+                onClick={ onModalOpenClick }>
+                +
+            </Button>
+            <GrillaEquipos listaEquipos={ dataEquipos }/>
         </Container>
+
+        { /* Modal */  }
+        <ModalFormularioEquipo 
+            modalOpen={ modalOpen }
+            onModalClose={ onModalClose }/>
     </Box>
 }
 
