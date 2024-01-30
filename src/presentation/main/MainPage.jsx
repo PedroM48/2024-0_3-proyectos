@@ -6,7 +6,15 @@ import GrillaEquipos from "./components/GrillaEquipos";
 import dataEquipos from "../../data/equipos"
 import ModalFormularioEquipo from "./components/ModalFormularioEquipo";
 
+const obtenerEquipoHTTP = () => {
+    const promesa = fetch("http://localhost:3000/equipos.json")
+    promesa
+}
+
 const MainPage = () => {
+
+    obtenerEquipoHTTP()
+
     const [drawerOpen, setDrawerOpen] = useState(false)
     const [modalOpen, setModalOpen] = useState(false)
 
