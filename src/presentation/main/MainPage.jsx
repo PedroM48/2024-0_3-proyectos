@@ -1,5 +1,5 @@
-import { Box, AppBar, Toolbar, IconButton, Typography, Drawer, List, ListItem, ListItemText, Button } from "@mui/material"
-import { Container } from "@mui/material"
+import { Box, AppBar, Toolbar, IconButton, Typography, Drawer, List, ListItem, ListItemText, Card, CardContent, CardActions, Button, Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material"
+import { Container, ListItemIcon } from "@mui/material"
 import MenuIcon from '@mui/icons-material/Menu';
 import { useState } from "react";
 import GrillaEquipos from "./components/GrillaEquipos";

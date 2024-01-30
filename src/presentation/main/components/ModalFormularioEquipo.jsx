@@ -1,50 +1,77 @@
-import {
-    Button, Dialog, DialogActions, DialogContent, DialogTitle,
-    Table, TableBody, TableCell, TableContainer, TableHead,
-    TableRow, TextField
-} from "@mui/material"
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, 
+    TextField } from "@mui/material"
+import { useState } from "react";
+
+import TablaIntegrantes from "./TablaIntegrantes";
 
 const ModalFormularioEquipo = (props) => {
+    const [nombreEquipo, setNombreEquipo] = useState("")
+    const [nombreIntegrante, setNombreIntegrante] = useState("")
+    const [codigoIntegrante, setCodigoIntegrante] = useState("")
+    const [listaIntegrantes, setListaIntegrantes] = useState([])
+
+    const onNombreIntegranteChangeHandler = (event) => {
+        setNombreIntegrante(event.target.value)
+    }
+
+    const onCodigoIntegranteChangeHandler = (event) => {
+        setCodigoIntegrante(event.target.value)
+    }
+
+    const onNombreEquipoChangeHandler = (event) => {
+        setNombreEquipo(event.target.value)
+    }
+
+    const agregarIntegranteOnClick = () => {
+        if (nombreIntegrante == "" || codigoIntegrante == "") {
+            return
+        }
+
+        const listaClonada = [...listaIntegrantes] // clonamos
+        listaClonada.push({
+            nombre : nombreIntegrante,
+            codigo : codigoIntegrante
+        })
+        setListaIntegrantes(listaClonada)
+        setNombreIntegrante("")
+        setCodigoIntegrante("")
+    }
+
+    const eliminarIntegranteOnClick = (indiceAEliminar) => {
+        const listaClonada = [...listaIntegrantes]
+        listaClonada.splice(indiceAEliminar, 1)
+        setListaIntegrantes(listaClonada)
+    }
+
     return <Dialog
-        open={props.modalOpen}
-        onClose={props.onModalClose}>
+        open={ props.modalOpen }
+        onClose={ props.onModalClose }>
         <DialogTitle >
             Nuevo Equipo
         </DialogTitle>
         <DialogContent>
-            <TextField label="Nombre"
-                variant="outlined" />
+            <TextField label="Nombre Equipo"
+                variant="outlined"
+                value={ nombreEquipo }
+                onChange={ onNombreEquipoChangeHandler } />
             <hr />
             <h4>Integrantes</h4>
             <TextField label="Nombre Integrante"
                 variant="outlined"
-                sx={{ mr: 1 }} />
+                sx={ { mr : 1 } }
+                value={ nombreIntegrante }
+                onChange={ onNombreIntegranteChangeHandler } />
             <TextField label="Código"
                 variant="outlined"
-                sx={{ mr: 1 }} />
-            <Button variant="contained">
+                sx={ { mr : 1 } }
+                value={ codigoIntegrante }
+                onChange={ onCodigoIntegranteChangeHandler } />
+            <Button variant="contained"
+                onClick={ agregarIntegranteOnClick }>
                 +
             </Button>
-            <TableContainer>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>
-                                Nombre
-                            </TableCell>
-                            <TableCell>
-                                Código
-                            </TableCell>
-                            <TableCell>
-                                Acciones
-                            </TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        No hay integrantes
-                    </TableBody>
-                </Table>
-            </TableContainer>
+            <TablaIntegrantes integrantes={ listaIntegrantes }
+                eliminarIntegranteOnClick={ eliminarIntegranteOnClick }/>
 
         </DialogContent>
         <DialogActions>
