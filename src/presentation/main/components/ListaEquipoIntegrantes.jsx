@@ -5,11 +5,11 @@ const ListaEquipoIntegrantes = (props) => {
     return <List>
         {
             props.integrantes.map((integrante) => {
-                return <ListItem>
+                return <ListItem key={integrante.codigo}>
                     <ListItemIcon>
-                        <StarIcon/>
+                        <StarIcon />
                     </ListItemIcon>
-                    <ListItemText primary={integrante.nombre} />
+                    <ListItemText primary={ integrante.nombre } />
                 </ListItem>
             })
         }

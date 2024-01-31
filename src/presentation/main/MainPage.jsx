@@ -1,22 +1,34 @@
-import { Box, AppBar, Toolbar, IconButton, Typography, Drawer, List, ListItem, ListItemText, Card, CardContent, CardActions, Button, Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material"
-import { Container, ListItemIcon } from "@mui/material"
+import { Box, AppBar, Toolbar, IconButton, Typography, Drawer, List, ListItem, ListItemText, Button } from "@mui/material"
+import { Container } from "@mui/material"
 import MenuIcon from '@mui/icons-material/Menu';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import GrillaEquipos from "./components/GrillaEquipos";
-import dataEquipos from "../../data/equipos"
 import ModalFormularioEquipo from "./components/ModalFormularioEquipo";
+import { useLocation } from "react-router-dom";
 
-const obtenerEquipoHTTP = () => {
-    const promesa = fetch("http://localhost:3000/equipos.json")
-    promesa
-}
+
+
 
 const MainPage = () => {
-
-    obtenerEquipoHTTP()
-
+    const [dataEquipos, setDataEquipos] = useState([])
     const [drawerOpen, setDrawerOpen] = useState(false)
     const [modalOpen, setModalOpen] = useState(false)
+
+    const location = useLocation()
+
+    const obtenerEquiposHTTP = async () => {    
+        /*fetch("http://localhost:3000/equipos.json").then( (response) => {
+            return response.json()
+        }).then( (data) => {
+            setDataEquipos(data)
+        } ).catch( (error) => {
+            console.error(error)
+        } )*/
+
+        const response = await fetch("http://localhost:3000/equipos.json")
+        const data = await response.json()
+        setDataEquipos(data)
+    }
 
     const onMenuIconClick = () => {
         setDrawerOpen(true)
@@ -34,6 +46,10 @@ const MainPage = () => {
         setModalOpen(false)
     }
 
+    useEffect(() => {
+        obtenerEquiposHTTP()
+    }, [])
+
     return <Box>
         <AppBar position="static">
             <Toolbar>
@@ -48,7 +64,7 @@ const MainPage = () => {
                     <MenuIcon />
                 </IconButton>
                 <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                    Equipos
+                    { `Equipos (${ location.state.username })` }
                 </Typography>
 
             </Toolbar>
@@ -58,10 +74,10 @@ const MainPage = () => {
             onClose={ onMenuClose }
             open={ drawerOpen }>
             <List>
-                <ListItem>
+                <ListItem key={"menu1"}>
                     <ListItemText primary={"Menu 1"} />
                 </ListItem>
-                <ListItem>
+                <ListItem key={"menu2"}>
                     <ListItemText primary={"Menu 1"} />
                 </ListItem>
             </List>
