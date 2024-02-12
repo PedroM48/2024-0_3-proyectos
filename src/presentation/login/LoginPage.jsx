@@ -2,19 +2,13 @@ import { Box, Button, Container, TextField, Alert } from "@mui/material"
 import CheckIcon from "@mui/icons-material/Check"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { FilePresent } from "@mui/icons-material"
 
 
 const LoginPage = () => {
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
     const [loginIncorrecto, setLoginIncorrecto] = useState(false)
-    const [dataUsuarios, setDataUsuarios] = useState([])
-
-    const obtenerUsuariosHTTP = async () => {
-        const response = await fetch("http://localhost:3000/usuarios.json")
-        const data = await response.json()
-        setDataUsuarios(data)
-    }
 
     // Creamos objeto para navegacion programatica
     const navigate = useNavigate()
@@ -27,28 +21,47 @@ const LoginPage = () => {
         setPassword(event.target.value)
     } 
 
-    const loginOnClick = () => {
-        const listaFiltrada = dataUsuarios.filter((usuario) => {
-            return usuario.username == username && usuario.password == password
-        })
+    const loginOnClick = async () => {
 
-        if (listaFiltrada.length > 0) {
-            // Hay por lo menos un usuario
-            console.log("Login correcto")
+        //const response = await fetch(`http://localhost:8000/proyectos/login/${username}/${password}`)
+
+        /*const formData = new FormData()
+        formData.append("username", username)
+        formData.append("password", password)*/
+
+        const dataUsername = {
+            username : username,
+            password : password
+        }
+
+        const response = await fetch("http://localhost:8000/proyectos/login-json", {
+            method : "post",
+            body : JSON.stringify(dataUsername)
+        })
+        const data = await response.json()
+
+        if (data.msg === "") {
+            // Login correcto
+            // Almacenando en localStorage
+            sessionStorage.setItem("USERNAME", username)
+
             navigate("/main", {
                 state : {
                     username : username
                 }
             })
-            
-        }else {
-            console.log("LOGIN INCORRECTO")
+        } else {
+            // Login incorrecto
             setLoginIncorrecto(true)
         }
     }
 
     useEffect(() => {
-        obtenerUsuariosHTTP()
+        // Valido si esta logueado, caso afirmativo, redirecciono a MainPage
+        if (sessionStorage.getItem("USERNAME") !== null) {
+            navigate("/main")
+            return
+        }
     }, [])
 
     return <Container maxWidth="sm">
